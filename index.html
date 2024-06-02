@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund.TheTickerisrunes.com</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+            color: orange;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input, button {
+            margin: 10px;
+            padding: 10px;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Official TheTickerIsRunes Presale Refund Allocation and Claim Site</h1><br>
+        Please enter the email that you used for the presale on the helio website.<br>
+        This will ensure that you are verified before the claim is live.
+        <form id="accessForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br><br>
+            <label for="wallet">Wallet Address:</label>
+            <input type="text" id="wallet" name="wallet" required>
+            <br><br>
+            <button type="submit">Submit</button>
+        </form>
+        <input type="file" id="walletFile" accept=".txt">
+        <br><br>
+        <button id="connectWallet">Connect Wallet</button>
+    </div>
+
+    <canvas id="matrix"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-wallets@0.14.0/dist/index.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-react@0.14.0/dist/index.umd.min.js"></script>
+    <script>
+        const allowedEmails = `
+        captain.munchie@mtlmail.com
+        kurtbearinger88@gmail.com
+        gavdiggs@gmail.com
+        adam1.aslampowell2@gmail.com
+        diaquids@gmail.com
+        cuervodelgado@gmail.com
+        downsfamily2021@gmail.com
+        nfoster23615@outlook.com
+        bmcooper1@gmail.com
+        nthbnd@gmail.com
+        guandreoli@yahoo.com
+        tailoredgamesnz@gmail.com
+        flyingoogi44@protonmail.com
+        bitbillionsbeginner@gmail.com
+        drake611824@gmail.com
+        cryptoprezplays@gmail.com
+        aidanchavasse1@yahoo.com
+        guandreoli@yahoo.com
+        deefowowe@gmail.com
+        frednlivi@gmail.com
+        ufuomasamuel06@gmail.com
+        asmankoo@gmail.com
+        mcginn77@gmail.com
+        samuelufuoma4@gmail.com
+        jchen463@gmail.com
+        ernesto.chr15@gmail.com
+        benhassine@web.de
+        frednlivi@gmail.com
+        erikvieyra11@yahoo.com
+        edocrypto24@protonmail.co
+        bridgdef@gmail.com
+        mikefitz010@gmail.com
+        kingdavid273@gmail.com
+        j.cras1987@gmail.com
+        jvdweele84@gmail.com
+        pavloskozo@hotmail.com
+        anonoon22@gmail.com
+        marioleon666666@hotmail.c
+        mangtani.rohit20@gmail.com
+        erik.templeman@gmail.com
+        pavloskozsi@hotmail.com
+        erikvieyra11@yahoo.com
+        toidi.diputs.invest@gmail.co
+        design.mvd@gmail.com
+        metacapitalmanagement@g
+        fotis__18@hotmail.com
+        alperkosen@gmail.com
+        mikee_the_mighty@web.de
+        pizzazz@tutamail.com
+        toidi.diputs.invest@gmail.co
+        anonoon22@gmail.com
+        medicalclinicsolutiona@gmail
+        stuart@stuartmacfarlane.co.u
+        ali.elrozz93@gmail.com
+        israel.landa@gmail.com
+        worldphotographyhubofficial
+        manishraut.business@gmail.
+        nobossnation@gmail.com
+        michal.sipek@techone.pl
+        cfterniatis@yahoo.com
+        ice.cold.vs.woke@gmail.com
+        cryptoprezplays@gmail.com
+        moolan2210@gmail.com
+        jesse2k20@protonmail.com
+        agom.two@gmail.com
+        erikvieyra11@yahoo.com
+        jenniebgoode@gmail.con
+        pawel.kaczmarek.games@g
+        karatekas7@hotmail.com
+        physicalmeta@protonmail.co
+        jvdweele84@gmail.com
+        roshanchak@gmail.com
+        johnnytdong@icloud.com
+        langera@me.com
+        nielsvvliet95@gmail.com
+        yusiboy2020@gmail.com
+        jamesleebourne@yahoo.co.u
+        ali.elrozz93@gmail.com
+        Justinjoseph289@gmail.com
+        precisionpipsllc@gmail.com
+        thecabincrypto@gmail.com
+        jesse2k20@protonmail.com
+        zafar.majeed7861@gmail.co
+        alisuraa24@gmail.com
+        unlockimei@icloud.com
+        mitch0279@gmail.com
+        cryptorocket87@gmail.com
+        yusiboy3030@gmail.com
+        orlando3@duck.com
+        dariusjw3@gmail.com
+        pavloskozsi@hotmail.com
+        nftcryptoexchange@gmail.co
+        chieftainjason013@gmail.co
+        gellobytes@gmail.com
+        theonlygreystudios@gmail.co
+        frednlivi@gmail.com
+        elliotmclachlan@gmail.com
+        israelaj01@gmail.com
+        pavloskozo@hotmail.com
+        pavloskozsi@hotmail.com
+        asweezy0@gmail.com
+        gnawnomis@163.com
+        thakursaab7683@gmail.com
+        gnawnomis@163.com
+        carloderby22@gmail.com
+        bangalydore431@gmail.com
+        gnawnomis@163.com
+        zertha37@gmail.com
+        stroyen@protonmail.com
+        kositp.ink@gmail.com
+        zafar.majeed7861@gmail.co
+        ragnarlox.crypto@gmail.com
+        kositp.ink@gmail.com
+        jake.lomas123@gmail.com
+        mutley027@gmail.com
+        lildave4real2004@gmail.com
+        gellobytes@gmail.com
+        princewillnna5@gmail.com
+        peasley56@gmail.com
+        pwf1k1564fr1il@gmail.com
+        samuelsam19.ss@gmail.com
+        dariusjw3@gmail.com
+        langera@me.com
+        gk.pamekasan@gmail.com
+        btcgaz88@gmail.com
+        kingopefotos@gmail.com
+        uo.torlof@gmail.com
+        alperkosen@gmail.com
+        alby1900@icloud.com
+        jchen463@gmail.com
+        roshanchak@gmail.com
+        desmondheng@live.com.sg
+        e.hakson@gmail.com
+        zxy2skt@gmail.com
+        xyz510888@gmail.com
+        st4rl0rd97@gmail.com
+        enricofusaro92@gmail.com
+        adepojuolayemimike@gmail.
+        rajanlingaraj@gmail.com
+        emaincent@gmail.com
+        fawazk84@gmail.com
+        cory0305@protonmail.com
+        cubi.vnc@gmail.com
+        gerson23618582@gmail.com
+        gmarc9050@gmail.com
+        victor.galvan191@gmail.com
+        wayne.look@hotmail.co.uk
+        TommyHoles668@proton.me
+        maria@nystrom.ooo
+        gugroupkk@gmail.com
+        cryptoman.cc@gmail.com
+        jcapek1211@gmail.com
+        toomas.liivamag@gmail.com
+        aeribean@gmail.com
+        solegendary1312@gmail.co
+        cryptoman.cc@gmail.com
+        ryumeta6@gmail.com
+        bitbillionsbeginner@gmail.co
+        ojonokadaddy@gmail.com
+        solegendary1312@gmail.co
+        cryptoman.cc@gmail.com
+        avinick99@gmail.com
+        cryptoman.cc@gmail.com
+        khinqviktor1111@gmil.com
+        jake.lomas123@gmail.com
+        nguyenthienquang116@gmai
+        cheerfulguy18@hotmail.com
+        estate080794@protonmail.co
+        mypcminer@gmail.com
+        frednlivi@gmail.com
+        gabe_flx@yahoo.com
+        cryptoman.cc@gmail.com
+        karpe-dm@hotmail.com
+        frednlivi@gmail.com
+        toni.tillonen@powera.fi
+        eetu.maenpaa@gmail.com
+        paffis@gmail.com
+        TommyHoles668@proton.me
+        iadis999@gmail.com
+        espinu15@gmail.com
+        mikeuniter@gmail.com
+        villee55@gmail.com
+        thandiweshongwe829@gmail
+        ali.elrozz93@gmail.com
+        natyapweien@gmail.com
+        pavloskozsi@hotmail.com
+        pavloskozsi@hotmail.com
+        anssi.hirvioja@gmail.com
+        compyuriza@hotmail.com
+        logitaki@gmail.com
+        teemu@balansiafilms.com
+        amarsran19@gmail.com
+        teemu@balansiafilms.com
+        mauroneri45@gmail.com
+        sigkilled@gmail.com
+        bosskapex@gmail.com
+        eddie_b23@hotmail.com
+        taabio@gmail.com
+        rami.oikarinen@gmail.com
+        langera@me.com
+        toni.tillonen@powera.fi
+        mstr.jae@gmail.com
+        sigkilled@gmail.com
+        thomas.fh.lambert@gmail.co
+        guandreoli@yahoo.com
+        maximize1990@gmail.com
+        bosskapex@gmail.com
+        mikko.jarrah@gmail.com
+        pascal.vicampo@gmail.com
+        `.trim().split("\n");
+
+        document.getElementById("accessForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const wallet = document.getElementById("wallet").value.trim();
+
+            if (allowedEmails.includes(email) && wallet) {
+                alert("Access Granted!");
+                // Here you can redirect to the protected page
+                window.location.href = "protected.html";
+            } else {
+                alert("Access Denied!");
+            }
+        });
+
+        document.getElementById("walletFile").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const wallets = e.target.result.split("\n").map(wallet => wallet.trim());
+                    // Here you can handle the uploaded wallets
+                    console.log(wallets);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById("connectWallet").addEventListener("click", async () => {
+            const wallets = solanaWalletAdapterWallets.defaultWallets;
+            const walletProvider = new solanaWalletAdapterWallets.WalletProvider(wallets, {
+                autoConnect: true,
+                onError: (error) => console.error(error),
+            });
+            await walletProvider.connect();
+            const wallet = walletProvider.wallet;
+            if (wallet) {
+                alert(`Wallet connected: ${wallet.publicKey}`);
+            }
+        });
+
+        // Matrix rain background effect
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]".split("");
+        const font_size = 10;
+        const columns = canvas.width / font_size;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = font_size + "px arial";
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrix[Math.floor(Math.random() * matrix.length)];
+                ctx.fillText(text, i * font_size, drops[i] * font_size);
+                if (drops[i] * font_size > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+    </script>
+</body>
+</html>
